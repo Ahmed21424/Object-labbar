@@ -15,6 +15,8 @@ public class Main {
 
 
 
+
+
         System.out.println("Initial speed: " + saab.getCurrentSpeed());
 
         saab.gas(0.5);
@@ -62,6 +64,17 @@ public class Main {
 
 
         System.out.println(volvoWork.getInventory());
+        allWork.removeVehicle(scania);
+
+        CarCarrier testloadCarry = new CarCarrier(Color.red,3,190,"LoadCarrytest");
+        Volvo240 testlaodvolvo = new Volvo240(Color.black, 3,140,"LoadVolvotest");
+
+        testloadCarry.setRampDown();
+        testloadCarry.loadVehicle(testlaodvolvo);
+        testlaodvolvo.move();
+        testloadCarry.unloadVehicle();
+        testlaodvolvo.move();
+
 
 
 
