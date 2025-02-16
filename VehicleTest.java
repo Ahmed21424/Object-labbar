@@ -116,4 +116,35 @@ class VehicleTest {
         assertEquals(carry.getPositionString(), volvo.getPositionString());
     }
 
+    @Test
+    void vehicleCanNOTGasWhenLoaded(){
+        CarCarrier testloadCarry = new CarCarrier(Color.red,3,190,"LoadCarrytest");
+        Volvo240 testloadvolvo = new Volvo240(Color.black, 3,140,"LoadVolvotest");
+        testloadCarry.setRampDown();
+        testloadCarry.loadVehicle(testloadvolvo);
+
+        testloadvolvo.gas(0.5);
+
+        double vehicleSpeed = testloadvolvo.getCurrentSpeed();
+
+        assertEquals(0, vehicleSpeed,
+                "Vehicle speed should not increase when loaded on the carrier.");
+
+
+    }
+    @Test
+    void vehicleCanGasAfterUnloaded(){
+        CarCarrier testloadCarry = new CarCarrier(Color.red,3,190,"LoadCarrytest");
+        Volvo240 testloadvolvo = new Volvo240(Color.black, 3,140,"LoadVolvotest");
+
+        testloadCarry.setRampDown();
+        testloadCarry.loadVehicle(testloadvolvo);
+        Vehicle unloadedVehicle = testloadCarry.unloadVehicle();
+
+        assertEquals(testloadvolvo, unloadedVehicle, "Wrong car returned");
+        testloadvolvo.gas(0.7);
+        assertTrue(testloadvolvo.getCurrentSpeed() > 0);
+
+    }
+
 }
