@@ -23,6 +23,7 @@ public class Saab95 extends Vehicle{
         return length;
     }
 
+
     @Override
     public double speedFactor(){
         double turbo = 1;
