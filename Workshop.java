@@ -22,4 +22,14 @@ class Workshop <T extends Vehicle>{
         return false;
     }
 
+    public boolean removeVehicle(T Vehicle){
+        if (inventory.isEmpty()){
+            return false;
+        }
+        inventory.remove(Vehicle);
+        System.out.println(Vehicle + " Has been fixed and Returned to owner");
+        return true;
+
+    }
+
 }
