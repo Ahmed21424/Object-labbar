@@ -15,7 +15,6 @@ public class CarCarrier extends TruckBase{
     public void setRampUp(){
         rampUp = true;
     }
-
     public void setRampDown(){
         if (this.getCurrentSpeed() == 0){
             rampUp = false;
@@ -30,33 +29,32 @@ public class CarCarrier extends TruckBase{
 
     }
 
-
     public boolean loadVehicle(Vehicle carToLoad){
         if (carToLoad.getLength() < 6 && !rampUp && vehicleStack.size() < 6 && carInRange(carToLoad)){
+            carToLoad.setCurrentSpeed(0);
+            carToLoad.setLoaded();
             vehicleStack.push(carToLoad);
             return true;
         }
         System.out.println("Vehicle cant be loaded");
         return false;
-    }// Skall max kunna hålla 6 bilar i taget
+    }// Skall max kunna hÃ¥lla 6 bilar i taget
 
-    public boolean unloadVehicle(){
+    public Vehicle unloadVehicle(){
         if (!rampUp) {
-            vehicleStack.pop();
-            return true;
+            vehicleStack.peek().setNotLoaded();
+            return vehicleStack.pop();
         }
         System.out.println("Could not unload, Ramp needs to be down");
-        return false;
+        return null;
     }
 
     public Stack<Vehicle> getVehicleStack() {
         return vehicleStack;
     }
-
     public double getLength(){
         return length;
     }
-
 
     @Override
     public double speedFactor(){
@@ -65,15 +63,17 @@ public class CarCarrier extends TruckBase{
 
     @Override
     public void move(){
-        if (rampUp){
-            super.move();
-            for (Vehicle car : vehicleStack) {
-                car.x = this.x;
-                car.y = this.y;
+        if(!getIsLoaded()){
+            if (rampUp) {
+                super.move();
+                for (Vehicle car : vehicleStack) {
+                    car.x = this.x;
+                    car.y = this.y;
+                }
             }
+            System.out.println("Must have ramp up to drive!");
+        }else{
+            loadedMsg();
         }
-        System.out.println("Must have ramp up to drive!");
-
     }
-
 }
