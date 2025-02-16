@@ -11,6 +11,7 @@ public abstract class Vehicle implements Movable{
     public double x;
     public double y;
     private Direction direction;
+    private boolean isLoaded;
 
     public enum Direction{     //"Låser" ner vad vi kan skriva som direction
         North, East, South, West;
@@ -28,6 +29,10 @@ public abstract class Vehicle implements Movable{
         this.direction = Direction.North;    //Börjar mot norr
 
     }
+    public void setLoaded(){this.isLoaded=true;}
+    public void setNotLoaded(){this.isLoaded=false;}
+    public boolean getIsLoaded(){return this.isLoaded;}
+    public void loadedMsg(){System.out.println("Vehicle is loaded");}
 
     public Color getColor() {
         return this.color;
@@ -63,51 +68,74 @@ public abstract class Vehicle implements Movable{
 
 
     public void incrementSpeed(double amount) {
-        double newSpeed = getCurrentSpeed() + speedFactor() * amount;
-        setCurrentSpeed(newSpeed);
+        if(!isLoaded) {
+            double newSpeed = getCurrentSpeed() + speedFactor() * amount;
+            setCurrentSpeed(newSpeed);
+        }else {
+            loadedMsg();
+        }
     }
 
     public void decrementSpeed(double amount) {
-        double newSpeed = getCurrentSpeed() - speedFactor() * amount;
-        setCurrentSpeed(newSpeed);
+        if(!isLoaded) {
+            double newSpeed = getCurrentSpeed() - speedFactor() * amount;
+            setCurrentSpeed(newSpeed);
+        }else{
+            loadedMsg();
+        }
     }
 
 
     @Override
     public void move() {
-        if (direction == Direction.North) {
-            y += currentSpeed;
-        } else if (direction == Direction.South) {
-            y -= currentSpeed;
-        } else if (direction == Direction.East) {
-            x += currentSpeed;
-        } else if (direction == Direction.West) {
-            x -= currentSpeed;
+        if(!isLoaded) {
+            if (direction == Direction.North) {
+                y += currentSpeed;
+            } else if (direction == Direction.South) {
+                y -= currentSpeed;
+            } else if (direction == Direction.East) {
+                x += currentSpeed;
+            } else if (direction == Direction.West) {
+                x -= currentSpeed;
+            }
+        }else
+        {
+            loadedMsg();
         }
     }
 
     public void turnLeft() {
-        if (direction == Direction.North) {
-            direction = Direction.West;
-        } else if (direction == Direction.West) {
-            direction = Direction.South;
-        } else if (direction == Direction.South) {
-            direction = Direction.East;
-        } else {
-            direction = Direction.North;
+        if(!isLoaded) {
+            if (direction == Direction.North) {
+                direction = Direction.West;
+            } else if (direction == Direction.West) {
+                direction = Direction.South;
+            } else if (direction == Direction.South) {
+                direction = Direction.East;
+            } else {
+                direction = Direction.North;
+            }
+        }else
+        {
+            loadedMsg();
         }
     }
 
     @Override
     public void turnRight() {
-        if (direction == Direction.North) {
-            direction = Direction.East;
-        } else if (direction == Direction.East) {
-            direction = Direction.South;
-        } else if (direction == Direction.South) {
-            direction = Direction.West;
-        } else {
-            direction = Direction.North;
+        if (!isLoaded) {
+            if (direction == Direction.North) {
+                direction = Direction.East;
+            } else if (direction == Direction.East) {
+                direction = Direction.South;
+            } else if (direction == Direction.South) {
+                direction = Direction.West;
+            } else {
+                direction = Direction.North;
+            }
+        }else
+        {
+            loadedMsg();
         }
     }
 
@@ -123,10 +151,15 @@ public abstract class Vehicle implements Movable{
 
     @Override
     public void gas(double amount) {
-        if (amount < 0 || amount > 1) {
-            System.out.println("Can only take values in the interval 0,1");
+        if (!isLoaded) {
+            if (amount < 0 || amount > 1) {
+                System.out.println("Can only take values in the interval 0,1");
+            }
+            incrementSpeed(amount);
+        }else
+        {
+            loadedMsg();
         }
-        incrementSpeed(amount);
     }
 
     @Override
